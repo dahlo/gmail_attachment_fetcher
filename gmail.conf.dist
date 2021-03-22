@@ -1,0 +1,4 @@
+[gmail]
+user = user@gmail.com
+password = hunter2
+search_string = "has:attachment AND from:noreply@mail.se AND after:2019-11-01 AND before:2021-02-28"
