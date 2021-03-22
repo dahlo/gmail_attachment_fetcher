@@ -8,7 +8,9 @@ import email
 import pdb
 from datetime import datetime
 import re
+import os
 
+usage = f"python3 {sys.argv[0]} <path to config file> <output path>"
 
 # function to decode email subject
 import base64, quopri
@@ -23,8 +25,16 @@ def encoded_words_to_text(encoded_words):
 
 
 # get arguments
-config_file = sys.argv[1]
-output_dir = sys.argv[2]
+try:
+    config_file = sys.argv[1]
+    output_dir = sys.argv[2]
+except:
+    print(usage)
+    sys.exit()
+
+# create output dir if needed
+if not os.path.isdir(output_dir):
+    os.mkdir(output_dir)
 
 # get config
 config = configparser.ConfigParser()
