@@ -39,17 +39,20 @@ if not os.path.isdir(output_dir):
 # get config
 config = configparser.ConfigParser()
 config.read(config_file)
-user = config.get('gmail', 'user')
-password = config.get('gmail', 'password')
-gmail_search = config.get('gmail', 'search_string')
+user = config.get('mail', 'user')
+password = config.get('mail', 'password')
+search_string = config.get('mail', 'search_string')
+server = config.get('mail', 'server')
+port = config.get('mail', 'port')
+inbox = config.get('mail', 'inbox')
 
 # open mail
-mail = imaplib.IMAP4_SSL('imap.gmail.com', '993')
+mail = imaplib.IMAP4_SSL(server, port)
 mail.login(user, password)
-mail.select('Inbox')
+mail.select(inbox)
 
-# search for invoice emails
-status, data = mail.search(None, 'X-GM-RAW', gmail_search)
+# search for matching emails
+status, data = mail.search(None, 'X-GM-RAW', search_string)
 mail_ids = data[0]
 
 # loop over the emails
@@ -64,7 +67,7 @@ for i,mail_id in enumerate(mail_ids.split()):
     #pdb.set_trace()
 
 
-    # downloading attachments (from https://medium.com/@sdoshi579/to-read-emails-and-download-attachments-in-python-6d7d6b60269)
+    # downloading attachments if they exist (from https://medium.com/@sdoshi579/to-read-emails-and-download-attachments-in-python-6d7d6b60269)
     for part in email_message.walk():
         if part.get_content_maintype() == 'multipart':
             continue
